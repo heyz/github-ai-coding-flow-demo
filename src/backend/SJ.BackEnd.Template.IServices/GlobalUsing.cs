@@ -1,0 +1,1 @@
+﻿global using SJ.BackEnd.Template.Model;

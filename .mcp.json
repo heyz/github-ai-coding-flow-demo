@@ -1,0 +1,11 @@
+{
+    "mcpServers": {
+    "gitee": {
+      "type": "streamable-http",
+      "url": "https://api.gitee.com/mcp",
+      "headers": {
+        "Authorization": "Bearer eae5f6645755355d1f04cdee6b693f4e"
+      }
+    }
+  }
+}
