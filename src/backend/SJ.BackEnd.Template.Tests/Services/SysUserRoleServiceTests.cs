@@ -28,12 +28,9 @@ public class SysUserRoleServiceTests
                      .ReturnsAsync(new SysUser { Id = 1 });
         _mockRoleRepo.Setup(r => r.GetById(It.IsAny<object>()))
                      .ReturnsAsync(new SysRole { Id = 2 });
-        _mockRepo.Setup(r => r.QueryByExpression(
-            It.IsAny<Expression<Func<SysUserRole, bool>>>(),
-            It.IsAny<string>(),
-            It.IsAny<Expression<Func<SysUserRole, object>>>(),
-            It.IsAny<bool>()))
-                 .ReturnsAsync(new List<SysUserRole>());
+        _mockRepo.Setup(r => r.Exist(
+            It.IsAny<Expression<Func<SysUserRole, bool>>>()))
+                 .ReturnsAsync(false);
         _mockRepo.Setup(r => r.Insert(It.IsAny<SysUserRole>()))
                  .ReturnsAsync(1L);
 
@@ -84,12 +81,9 @@ public class SysUserRoleServiceTests
                      .ReturnsAsync(new SysUser { Id = 1 });
         _mockRoleRepo.Setup(r => r.GetById(It.IsAny<object>()))
                      .ReturnsAsync(new SysRole { Id = 2 });
-        _mockRepo.Setup(r => r.QueryByExpression(
-            It.IsAny<Expression<Func<SysUserRole, bool>>>(),
-            It.IsAny<string>(),
-            It.IsAny<Expression<Func<SysUserRole, object>>>(),
-            It.IsAny<bool>()))
-                 .ReturnsAsync(new List<SysUserRole> { new SysUserRole { UserId = 1, RoleId = 2 } });
+        _mockRepo.Setup(r => r.Exist(
+            It.IsAny<Expression<Func<SysUserRole, bool>>>()))
+                 .ReturnsAsync(true);
 
         // Act
         var result = await _service.Bind(1, 2);

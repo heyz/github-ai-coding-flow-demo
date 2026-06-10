@@ -33,8 +33,7 @@ public class SysUserPositionService(
             return false;
 
         // 检查是否已存在绑定关系
-        var exists = await base.QueryByExpression(u => u.UserId == userId && u.PositionId == positionId);
-        if (exists.Any())
+        if (await base.Exist(u => u.UserId == userId && u.PositionId == positionId))
             return false;
 
         var relation = SysUserPosition.CreateRelation(userId, positionId);

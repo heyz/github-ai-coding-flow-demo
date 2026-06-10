@@ -86,9 +86,8 @@ public class SysUserService(IBaseRepository<SysUser> repository) : BaseServices<
     /// <returns>昵称是否已被占用</returns>
     private async Task<bool> IsNicknameExists(string nickname, long? excludeUserId = null)
     {
-        var users = await base.QueryByExpression(u => u.Nickname == nickname);
         if (excludeUserId.HasValue)
-            return users.Any(u => u.Id != excludeUserId.Value);
-        return users.Any();
+            return await base.Exist(u => u.Nickname == nickname && u.Id != excludeUserId.Value);
+        return await base.Exist(u => u.Nickname == nickname);
     }
 }
