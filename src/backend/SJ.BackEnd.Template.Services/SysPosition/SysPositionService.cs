@@ -76,8 +76,7 @@ public class SysPositionService(
             return false;
 
         // 检查是否有用户关联
-        var userPositions = await userPositionRepository.QueryByExpression(up => up.PositionId == id);
-        if (userPositions.Any())
+        if (await userPositionRepository.Exist(up => up.PositionId == id))
             return false;
 
         return await base.DeleteById(id);

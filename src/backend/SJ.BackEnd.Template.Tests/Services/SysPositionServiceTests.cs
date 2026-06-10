@@ -127,12 +127,9 @@ public class SysPositionServiceTests
         // Arrange
         _mockRepo.Setup(r => r.GetById(It.IsAny<object>()))
                  .ReturnsAsync(new SysPosition { Id = 1, Name = "测试岗位", IsSystem = false });
-        _mockUserPositionRepo.Setup(r => r.QueryByExpression(
-                It.IsAny<System.Linq.Expressions.Expression<Func<SysUserPosition, bool>>>(),
-                It.IsAny<string>(),
-                It.IsAny<System.Linq.Expressions.Expression<Func<SysUserPosition, object>>>(),
-                It.IsAny<bool>()))
-                 .ReturnsAsync(new List<SysUserPosition>());
+        _mockUserPositionRepo.Setup(r => r.Exist(
+                It.IsAny<System.Linq.Expressions.Expression<Func<SysUserPosition, bool>>>()))
+                 .ReturnsAsync(false);
         _mockRepo.Setup(r => r.DeleteById(It.IsAny<object>()))
                  .ReturnsAsync(true);
 
@@ -149,12 +146,9 @@ public class SysPositionServiceTests
         // Arrange
         _mockRepo.Setup(r => r.GetById(It.IsAny<object>()))
                  .ReturnsAsync(new SysPosition { Id = 1, Name = "测试岗位", IsSystem = false });
-        _mockUserPositionRepo.Setup(r => r.QueryByExpression(
-                It.IsAny<System.Linq.Expressions.Expression<Func<SysUserPosition, bool>>>(),
-                It.IsAny<string>(),
-                It.IsAny<System.Linq.Expressions.Expression<Func<SysUserPosition, object>>>(),
-                It.IsAny<bool>()))
-                 .ReturnsAsync(new List<SysUserPosition> { new SysUserPosition { Id = 1, UserId = 1, PositionId = 1 } });
+        _mockUserPositionRepo.Setup(r => r.Exist(
+                It.IsAny<System.Linq.Expressions.Expression<Func<SysUserPosition, bool>>>()))
+                 .ReturnsAsync(true);
 
         // Act
         var result = await _service.Delete(1);

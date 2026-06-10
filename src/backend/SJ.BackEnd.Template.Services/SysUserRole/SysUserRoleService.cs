@@ -32,8 +32,7 @@ public class SysUserRoleService(
             return false;
 
         // 检查是否已存在绑定关系
-        var exists = await base.QueryByExpression(u => u.UserId == userId && u.RoleId == roleId);
-        if (exists.Any())
+        if (await base.Exist(u => u.UserId == userId && u.RoleId == roleId))
             return false;
 
         var relation = SysUserRole.CreateRelation(userId, roleId);
