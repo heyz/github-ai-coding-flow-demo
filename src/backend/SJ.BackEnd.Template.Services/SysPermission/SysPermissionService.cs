@@ -9,6 +9,8 @@
 * ==============================================================================*/
 #endregion
 
+using Mapster;
+
 namespace SJ.BackEnd.Template.Services;
 
 public class SysPermissionService(IBaseRepository<SysPermission> repository)
@@ -19,7 +21,7 @@ public class SysPermissionService(IBaseRepository<SysPermission> repository)
         if (await base.Exist(u => u.Code == request.Code))
             return null;
 
-        var permission = SysPermission.CreateFrom(request);
+        var permission = SysPermission.Create(request);
 
         var newId = await base.Insert(permission);
         return await base.GetById(newId);
@@ -34,13 +36,7 @@ public class SysPermissionService(IBaseRepository<SysPermission> repository)
         if (permission == null)
             return false;
 
-        permission.Name = request.Name;
-        permission.Code = request.Code;
-        permission.Type = request.Type;
-        permission.ParentId = request.ParentId;
-        permission.Path = request.Path;
-        permission.Icon = request.Icon;
-        permission.SortOrder = request.SortOrder;
+        request.Adapt(permission);
         permission.UpdatedAt = DateTime.Now;
 
         return await base.Update(permission);

@@ -9,6 +9,8 @@
 * ==============================================================================*/
 #endregion
 
+using Mapster;
+
 namespace SJ.BackEnd.Template.Services;
 
 /// <summary>
@@ -36,7 +38,7 @@ public class SysPositionService(IBaseRepository<SysPosition> repository) : BaseS
         if (await base.Exist(u => u.Code == request.Code))
             return null;
 
-        var position = SysPosition.CreateFrom(request);
+        var position = SysPosition.Create(request);
 
         var newId = await base.Insert(position);
         return await base.GetById(newId);
@@ -56,10 +58,7 @@ public class SysPositionService(IBaseRepository<SysPosition> repository) : BaseS
         if (position == null)
             return false;
 
-        position.Name = request.Name;
-        position.Code = request.Code;
-        position.Description = request.Description ?? string.Empty;
-        position.SortOrder = request.SortOrder;
+        request.Adapt(position);
         position.UpdatedAt = DateTime.Now;
 
         return await base.Update(position);

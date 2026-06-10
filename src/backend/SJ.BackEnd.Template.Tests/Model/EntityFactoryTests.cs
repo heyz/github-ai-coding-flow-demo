@@ -3,7 +3,7 @@ namespace SJ.BackEnd.Template.Tests.Model;
 public class SysUserTests
 {
     [Fact]
-    public void CreateFrom_WithValidRequest_SetsAllProperties()
+    public void Create_WithValidRequest_SetsAllProperties()
     {
         var request = new CreateUserRequest
         {
@@ -13,7 +13,7 @@ public class SysUserTests
             BirthDate = new DateTime(1990, 1, 1)
         };
 
-        var user = SysUser.CreateFrom(request);
+        var user = SysUser.Create(request);
 
         Assert.Equal(0, user.Id);
         Assert.Equal("test_nick", user.Nickname);
@@ -27,7 +27,7 @@ public class SysUserTests
 public class SysRoleTests
 {
     [Fact]
-    public void CreateFrom_WithValidRequest_SetsAllProperties()
+    public void Create_WithValidRequest_SetsAllProperties()
     {
         var request = new CreateRoleRequest
         {
@@ -37,7 +37,7 @@ public class SysRoleTests
             SortOrder = 1
         };
 
-        var role = SysRole.CreateFrom(request);
+        var role = SysRole.Create(request);
 
         Assert.Equal("管理员", role.Name);
         Assert.Equal("admin", role.Code);

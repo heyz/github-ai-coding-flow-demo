@@ -47,7 +47,7 @@ public class SysPermission
     /// <summary>
     /// 从创建请求构造权限实体
     /// </summary>
-    public static SysPermission CreateFrom(CreatePermissionRequest request)
+    public static SysPermission Create(CreatePermissionRequest request)
     {
         return new SysPermission
         {

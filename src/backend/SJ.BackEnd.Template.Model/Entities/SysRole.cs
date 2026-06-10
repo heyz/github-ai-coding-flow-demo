@@ -37,7 +37,7 @@ public class SysRole
     /// <summary>
     /// 从创建请求构造角色实体
     /// </summary>
-    public static SysRole CreateFrom(CreateRoleRequest request)
+    public static SysRole Create(CreateRoleRequest request)
     {
         return new SysRole
         {

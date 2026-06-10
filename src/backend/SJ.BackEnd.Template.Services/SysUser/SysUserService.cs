@@ -9,6 +9,8 @@
 * ==============================================================================*/
 #endregion
 
+using Mapster;
+
 namespace SJ.BackEnd.Template.Services;
 
 public class SysUserService(IBaseRepository<SysUser> repository) : BaseServices<SysUser>(repository), ISysUserService
@@ -32,7 +34,7 @@ public class SysUserService(IBaseRepository<SysUser> repository) : BaseServices<
                 return null;
         }
 
-        var user = SysUser.CreateFrom(request);
+        var user = SysUser.Create(request);
 
         var newId = await base.Insert(user);
         var created = await base.GetById(newId);
@@ -58,15 +60,11 @@ public class SysUserService(IBaseRepository<SysUser> repository) : BaseServices<
                 return false;
         }
 
-        var user = new SysUser
-        {
-            Id = id,
-            Nickname = request.Nickname,
-            RealName = request.RealName,
-            Gender = request.Gender,
-            BirthDate = request.BirthDate
-        };
+        var user = await base.GetById(id);
+        if (user == null)
+            return false;
 
+        request.Adapt(user);
         return await base.Update(user);
     }
 

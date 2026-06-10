@@ -48,7 +48,7 @@ public class SysUser
     /// <summary>
     /// 从创建请求构造用户实体
     /// </summary>
-    public static SysUser CreateFrom(CreateUserRequest request)
+    public static SysUser Create(CreateUserRequest request)
     {
         return new SysUser
         {

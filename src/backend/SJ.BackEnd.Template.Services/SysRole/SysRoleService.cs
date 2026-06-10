@@ -9,6 +9,8 @@
 * ==============================================================================*/
 #endregion
 
+using Mapster;
+
 namespace SJ.BackEnd.Template.Services;
 
 public class SysRoleService(IBaseRepository<SysRole> repository) : BaseServices<SysRole>(repository), ISysRoleService
@@ -29,7 +31,7 @@ public class SysRoleService(IBaseRepository<SysRole> repository) : BaseServices<
         if (await base.Exist(u => u.Name == request.Name))
             return null;
 
-        var role = SysRole.CreateFrom(request);
+        var role = SysRole.Create(request);
 
         var newId = await base.Insert(role);
         return await base.GetById(newId);
@@ -45,10 +47,7 @@ public class SysRoleService(IBaseRepository<SysRole> repository) : BaseServices<
         if (role == null)
             return false;
 
-        role.Name = request.Name;
-        role.Code = request.Code;
-        role.Description = request.Description ?? string.Empty;
-        role.SortOrder = request.SortOrder;
+        request.Adapt(role);
         role.UpdatedAt = DateTime.Now;
 
         return await base.Update(role);

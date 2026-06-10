@@ -62,7 +62,7 @@ public class SysPosition
     /// <summary>
     /// 从创建请求构造岗位实体
     /// </summary>
-    public static SysPosition CreateFrom(CreatePositionRequest request)
+    public static SysPosition Create(CreatePositionRequest request)
     {
         return new SysPosition
         {
