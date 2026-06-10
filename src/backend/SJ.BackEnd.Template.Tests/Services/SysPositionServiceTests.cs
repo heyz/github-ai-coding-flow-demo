@@ -7,12 +7,14 @@ namespace SJ.BackEnd.Template.Tests.Services;
 public class SysPositionServiceTests
 {
     private readonly Mock<IBaseRepository<SysPosition>> _mockRepo;
+    private readonly Mock<IBaseRepository<SysUserPosition>> _mockUserPositionRepo;
     private readonly ISysPositionService _service;
 
     public SysPositionServiceTests()
     {
         _mockRepo = new Mock<IBaseRepository<SysPosition>>();
-        _service = new SysPositionService(_mockRepo.Object);
+        _mockUserPositionRepo = new Mock<IBaseRepository<SysUserPosition>>();
+        _service = new SysPositionService(_mockRepo.Object, _mockUserPositionRepo.Object);
     }
 
     [Fact]
@@ -125,6 +127,12 @@ public class SysPositionServiceTests
         // Arrange
         _mockRepo.Setup(r => r.GetById(It.IsAny<object>()))
                  .ReturnsAsync(new SysPosition { Id = 1, Name = "测试岗位", IsSystem = false });
+        _mockUserPositionRepo.Setup(r => r.QueryByExpression(
+                It.IsAny<System.Linq.Expressions.Expression<Func<SysUserPosition, bool>>>(),
+                It.IsAny<string>(),
+                It.IsAny<System.Linq.Expressions.Expression<Func<SysUserPosition, object>>>(),
+                It.IsAny<bool>()))
+                 .ReturnsAsync(new List<SysUserPosition>());
         _mockRepo.Setup(r => r.DeleteById(It.IsAny<object>()))
                  .ReturnsAsync(true);
 
@@ -133,6 +141,27 @@ public class SysPositionServiceTests
 
         // Assert
         Assert.True(result);
+    }
+
+    [Fact]
+    public async Task Delete_WithUsers_ReturnsFalse()
+    {
+        // Arrange
+        _mockRepo.Setup(r => r.GetById(It.IsAny<object>()))
+                 .ReturnsAsync(new SysPosition { Id = 1, Name = "测试岗位", IsSystem = false });
+        _mockUserPositionRepo.Setup(r => r.QueryByExpression(
+                It.IsAny<System.Linq.Expressions.Expression<Func<SysUserPosition, bool>>>(),
+                It.IsAny<string>(),
+                It.IsAny<System.Linq.Expressions.Expression<Func<SysUserPosition, object>>>(),
+                It.IsAny<bool>()))
+                 .ReturnsAsync(new List<SysUserPosition> { new SysUserPosition { Id = 1, UserId = 1, PositionId = 1 } });
+
+        // Act
+        var result = await _service.Delete(1);
+
+        // Assert
+        Assert.False(result);
+        _mockRepo.Verify(r => r.DeleteById(It.IsAny<object>()), Times.Never);
     }
 
     [Fact]

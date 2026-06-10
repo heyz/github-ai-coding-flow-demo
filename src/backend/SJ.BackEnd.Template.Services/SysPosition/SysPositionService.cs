@@ -16,7 +16,10 @@ namespace SJ.BackEnd.Template.Services;
 /// <summary>
 /// 岗位服务实现
 /// </summary>
-public class SysPositionService(IBaseRepository<SysPosition> repository) : BaseServices<SysPosition>(repository), ISysPositionService
+public class SysPositionService(
+    IBaseRepository<SysPosition> repository,
+    IBaseRepository<SysUserPosition> userPositionRepository
+) : BaseServices<SysPosition>(repository), ISysPositionService
 {
     public async Task<PageModel<SysPosition>> GetPagedList(int pageIndex, int pageSize, string? keyword)
     {
@@ -70,6 +73,11 @@ public class SysPositionService(IBaseRepository<SysPosition> repository) : BaseS
         if (position == null)
             return false;
         if (position.IsSystem)
+            return false;
+
+        // 检查是否有用户关联
+        var userPositions = await userPositionRepository.QueryByExpression(up => up.PositionId == id);
+        if (userPositions.Any())
             return false;
 
         return await base.DeleteById(id);
